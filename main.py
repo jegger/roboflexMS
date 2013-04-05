@@ -76,6 +76,13 @@ class Server(object):
             cube["y"]=int(cube["y"]-y)
             cube["z"]=int(cube["z"])
             cube["typ"]=int(cube["typ"])
+            cube["rot"]=int(cube["rot"])
+            if cube["rot"]==90:
+                cube["rot"]=1
+            elif cube["rot"]==180:
+                cube["rot"]=2
+            elif cube["rot"]==270:
+                cube["rot"]=3
         
         #print umformated data
         for cube in array:
@@ -90,12 +97,16 @@ class Server(object):
         self.modbus.transfer_bahn_nr(10)
     process.exposed = True
     
-    def calculate(self, lager, anlage):
+    def calculate(self, lager1, anlage):
         """This function calculates the new Anlage. 
         With depot
         """
         '''Calculates the new anlage
         '''
+        lager=[]
+        for cube in lager1:
+            lager.append(cube)
+        
         final=[]
         for i in lager:
             final.append(i)
