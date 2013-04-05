@@ -56,16 +56,84 @@ class Server(object):
         if not data:
             return 'please send JSON over POST'
         
-        print data
+        #print incomming data
         array= json.loads(data)
         for i in array:
-            print i 
+            print "income:", i
+        
+        #get smalest x
+        x=100
+        y=100
+        for cube in array:
+            if cube["x"]<x:
+                x=cube["x"]
+            if cube["y"]<y:
+                y=cube["y"]
+        
+        #overwrite coordinates in array, and convert them into int
+        for cube in array:
+            cube["x"]=int(cube["x"]-x+13)
+            cube["y"]=int(cube["y"]-y)
+            cube["z"]=int(cube["z"])
+            cube["typ"]=int(cube["typ"])
+        
+        #print umformated data
+        for cube in array:
+            print "output", cube
             
         #send data over modbus
-        if not self.modbus.send_array(constant_data.depot):
+        final=self.calculate(constant_data.depot, array)
+        if not self.modbus.send_array(final):
             return False
         
+        #read that bahn in the sps into array
+        self.modbus.transfer_bahn_nr(10)
     process.exposed = True
+    
+    def calculate(self, lager, anlage):
+        """This function calculates the new Anlage. 
+        With depot
+        """
+        '''Calculates the new anlage
+        '''
+        final=[]
+        for i in lager:
+            final.append(i)
+            
+        c=0
+        for i in lager:
+            c+=1
+        
+        for cube in anlage:
+            typ=cube['typ']
+            
+            types=[]
+            for cu in lager:
+                if cu['typ']==typ:
+                    types.append(cu)
+            print len(types), "of", typ
+            
+            #highest cube in types
+            z=0
+            ind=-1
+            for cu in types:
+                if cu['z']>z:
+                    ind=types.index(cu,)
+            if ind==-1:
+                print "No highest cube found"
+                return False
+            print 'Final cube', types[ind]
+            
+            lager.remove(types[ind])
+            final.remove(types[ind])
+            final.append(cube)
+                
+        c=1
+        for i in final:
+            print c, i
+            c+=1
+        
+        return final
         
 
 #Start cherrypy server    

@@ -8,6 +8,7 @@ easier accessable.
 '''
 
 from pymodbus.client.sync import ModbusTcpClient
+import time
 
 class ModbusClient():
     connected=False
@@ -22,6 +23,16 @@ class ModbusClient():
             self.client = ModbusTcpClient('192.168.50.238', port=502)
             self.client.connect()
             self.connected=True
+            
+    
+    def transfer_bahn_nr(self, nr):
+        """Call this function to choosa a bahn nr
+        """
+        rq = self.client.write_register(532, nr)
+        rq = self.client.write_coil(8483, True)
+        time.sleep(0.5)
+        rq = self.client.write_coil(8483, False)
+        print "transfered"
 
     
     def send_array(self, array):
