@@ -32,6 +32,7 @@ class Server(object):
         #create modbus object
         self.modbus=modbus.ModbusClient()
         
+        
     def index(self):
         '''Readme start page
         
@@ -40,6 +41,7 @@ class Server(object):
         '''
         return 'This is a server for the Project RoboflexMS. Send your data to /process via POST in a JSON'
     index.exposed = True
+    
     
     def process(self, data):
         '''/process page. This page receives the JSON-data (of the cubes
@@ -58,8 +60,6 @@ class Server(object):
         
         #print incomming data
         array= json.loads(data)
-        for i in array:
-            print "income:", i
         
         #get smalest x
         x=100
@@ -86,8 +86,9 @@ class Server(object):
         
         #print umformated data
         for cube in array:
-            print "output", cube
-            
+            #print "output", cube
+            pass
+        
         #send data over modbus
         final=self.calculate(constant_data.depot, array)
         if not self.modbus.send_array(final):
@@ -97,11 +98,10 @@ class Server(object):
         self.modbus.transfer_bahn_nr(10)
     process.exposed = True
     
-    def calculate(self, lager1, anlage):
-        """This function calculates the new Anlage. 
+    
+    def calculate(self, lager1, bahn):
+        '''This function calculates the new Bahn. 
         With depot
-        """
-        '''Calculates the new anlage
         '''
         lager=[]
         for cube in lager1:
@@ -115,7 +115,7 @@ class Server(object):
         for i in lager:
             c+=1
         
-        for cube in anlage:
+        for cube in bahn:
             typ=cube['typ']
             
             types=[]
@@ -133,7 +133,7 @@ class Server(object):
             if ind==-1:
                 print "No highest cube found"
                 return False
-            print 'Final cube', types[ind]
+            #print 'Final cube', types[ind]
             
             lager.remove(types[ind])
             final.remove(types[ind])
@@ -141,7 +141,7 @@ class Server(object):
                 
         c=1
         for i in final:
-            print c, i
+            #print c, i
             c+=1
         
         return final

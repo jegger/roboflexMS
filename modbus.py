@@ -26,14 +26,48 @@ class ModbusClient():
             
     
     def transfer_bahn_nr(self, nr):
-        """Call this function to choosa a bahn nr
-        """
+        '''Send the array to PLC
+        
+        :Parameters:
+            `nr`: int
+                number of bahn to build
+        
+        :Returns:
+            bool, True if processing went well
+        '''
+        #Write number into memory
         rq = self.client.write_register(532, nr)
-        rq = self.client.write_coil(8483, True)
+        #Set flag to true/false => PLC reads the value in memory
+        rq = self.client.write_coil(8481, True)
         time.sleep(0.5)
-        rq = self.client.write_coil(8483, False)
-        print "transfered"
-
+        rq = self.client.write_coil(8481, False)
+        return True
+        
+    
+    def start_build(self):
+        '''Start the build process
+        '''
+        rq = self.client.write_coil(8480, True)
+        time.sleep(0.5)
+        rq = self.client.write_coil(8480, False)
+    
+    
+    def read_active_bahn(self):
+        '''Read the current loaded bahn from the PLC
+        
+        :Returns:
+            int, Number of bahn which is currently loaded
+        '''
+        rq = self.client.read_holding_registers(533, 1)
+        return int(rq.registers[0])
+    
+    
+    def is_machine_building(self):
+        '''
+        :Returns:
+            bool, True if machine is building
+        '''
+        
     
     def send_array(self, array):
         '''Send the array to PLC
@@ -78,6 +112,6 @@ class ModbusClient():
                 c+=1
             except:
                 print("Can't send the cube data to PLC over Modbus")
-        print("Cubes sent")
+        print("Cubes sent to PLC")
         return True
     
