@@ -78,15 +78,15 @@ class Server(object):
             cube["typ"]=int(cube["typ"])
             cube["rot"]=int(cube["rot"])
             if cube["rot"]==90:
-                cube["rot"]=1
+                cube["rot"]=3
             elif cube["rot"]==180:
                 cube["rot"]=2
             elif cube["rot"]==270:
-                cube["rot"]=3
+                cube["rot"]=1
         
         #print umformated data
         for cube in array:
-            #print "output", cube
+            print "output", cube
             pass
         
         #send data over modbus

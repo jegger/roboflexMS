@@ -36,6 +36,7 @@ class ModbusClient():
             bool, True if processing went well
         '''
         #Write number into memory
+        print "write number", nr
         rq = self.client.write_register(532, nr)
         #Set flag to true/false => PLC reads the value in memory
         rq = self.client.write_coil(8481, True)
