@@ -5,8 +5,10 @@ RoboFlexMS-Server
 =================
 
 This is part of the machine "RoboFlexMS", which is built as
-project by Dominique Burnand, Stephan Cortesi and Jonathan Osterwalder
+project by Dominique Burnand, Stephan Cortesi and Jonathan Osterwalder.
+This Code-project is done by Dominique Burnand.
 @msw-Winterthur. http://www.msw.ch
+
 
 This server is the bridge between the iPad application and the ABB
 AC-500 PLC. This application receives the data over CherryPy and sends
