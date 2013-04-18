@@ -26,7 +26,7 @@ class ModbusClient():
             
     
     def transfer_bahn_nr(self, nr):
-        '''Send the array to PLC
+        '''Send the number to PLC
         
         :Parameters:
             `nr`: int

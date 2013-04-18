@@ -43,6 +43,18 @@ class Server(object):
     index.exposed = True
     
     
+    def build_bahn(self, number):
+        ''' /build_bahn page. 
+        This function transfers the command further to the PLC. The PLC will load the Bahn Lager.
+        
+        :Parameters:
+            `number`: int
+        '''
+        number=int(number)
+        self.modbus.transfer_bahn_nr(number)
+    build_bahn.exposed = True
+        
+    
     def process(self, data):
         '''/process page. This page receives the JSON-data (of the cubes
         over POST and process them further (transfer them to the PLC).
@@ -60,6 +72,11 @@ class Server(object):
         
         #print incomming data
         array= json.loads(data)
+        
+        #invert coordinates x and y
+        for cube in array:
+            cube["x"]=cube["x"] * -1
+            cube["y"]=cube["y"] * -1
         
         #get smalest x
         x=100
