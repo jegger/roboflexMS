@@ -110,6 +110,9 @@ class Server(object):
         
         #send data over modbus
         final=self.calculate(constant_data.depot, array)
+        if not final:
+            print "CANT SEND BAHN - INVALID DATA"
+            return False
         if not self.modbus.send_array(final):
             return False
         
@@ -152,7 +155,6 @@ class Server(object):
             if ind==-1:
                 print "No highest cube found"
                 return False
-            #print 'Final cube', types[ind]
             
             lager.remove(types[ind])
             final.remove(types[ind])
