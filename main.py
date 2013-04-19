@@ -125,6 +125,7 @@ class Server(object):
         '''This function calculates the new Bahn. 
         With depot
         '''
+        #create temp. dicts
         lager=[]
         for cube in lager1:
             lager.append(cube)
@@ -132,38 +133,40 @@ class Server(object):
         final=[]
         for i in lager:
             final.append(i)
-            
-        c=0
-        for i in lager:
-            c+=1
-        
+                    
+        #Pass every cube in bahn
         for cube in bahn:
+            
+            #fetch typ of cube
             typ=cube['typ']
             
+            #get all cubes from the lager which have the same typ as the current cube
             types=[]
             for cu in lager:
                 if cu['typ']==typ:
                     types.append(cu)
-            print len(types), "of", typ
+            print len(types), "cubes of type", typ, "available"
             
             #highest cube in types
             z=0
             ind=-1
             for cu in types:
-                if cu['z']>z:
+                if cu['z']>=z:
                     ind=types.index(cu,)
             if ind==-1:
-                print "No highest cube found"
+                print "No highest cube found", "To much("+str(len(types))+") cubes of type:"+str(typ), "max cubes:"
                 return False
             
+            #remove cube out of lager
             lager.remove(types[ind])
             final.remove(types[ind])
+            #add cube to final array which will sent to the PLC
             final.append(cube)
-                
-        c=1
-        for i in final:
-            #print c, i
-            c+=1
+        
+        #Check if the final array has the same size as the lager array (no cube got lost)
+        if len(final)!=len(lager1):
+            print "Cube(s) got lost:", len(final), "of", len(lager1)
+            return False
         
         return final
         
