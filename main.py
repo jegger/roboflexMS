@@ -23,6 +23,7 @@ import os.path
 import json
 import modbus
 import constant_data
+import time
 
 #get configuration-file
 CONFIGFILE = os.path.join(os.path.dirname(__file__), 'server.conf')
@@ -33,7 +34,7 @@ class Server(object):
     def __init__(self, *kwargs):
         #create modbus object
         self.modbus=modbus.ModbusClient()
-        
+        self.last_request=0
         
     def index(self):
         '''Readme start page
@@ -52,6 +53,11 @@ class Server(object):
         :Parameters:
             `number`: int
         '''
+        if time.time()-self.last_request<6:
+            time.time()
+            print "you pressed again to soon"
+            return
+        self.last_request=time.time()
         number=int(number)
         self.modbus.transfer_bahn_nr(number)
     build_bahn.exposed = True
@@ -68,6 +74,11 @@ class Server(object):
         :Returns:
             bool, True if the processing went well. 
         '''
+        if time.time()-self.last_request<6:
+            time.time()
+            print "you pressed again to soon"
+            return
+        self.last_request=time.time()
         #check if data is sent
         if not data:
             return 'please send JSON over POST'
