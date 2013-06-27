@@ -40,7 +40,7 @@ class ModbusClient():
         rq = self.client.write_register(532, nr)
         #Set flag to true/false => PLC reads the value in memory
         rq = self.client.write_coil(8481, True)
-        time.sleep(0.5)
+        time.sleep(1)
         rq = self.client.write_coil(8481, False)
         return True
         

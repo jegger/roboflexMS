@@ -27,6 +27,9 @@ import time
 
 #get configuration-file
 CONFIGFILE = os.path.join(os.path.dirname(__file__), 'server.conf')
+MAX_AMMOUNT_OF_CUBES = "100"
+
+print "Start server with a a maximal amount of "+MAX_AMMOUNT_OF_CUBES+" cubes."
 
 class Server(object):
     '''Represent the CherryPy server class.
@@ -61,6 +64,13 @@ class Server(object):
         number=int(number)
         self.modbus.transfer_bahn_nr(number)
     build_bahn.exposed = True
+    
+    
+    def get_max_ammount(self, x):
+        '''This function returns the max ammount of cubes for the ipad
+        '''
+        return MAX_AMMOUNT_OF_CUBES
+    get_max_ammount.exposed = True
         
     
     def process(self, data):
@@ -181,6 +191,5 @@ class Server(object):
         
         return final
         
-
 #Start cherrypy server    
 cherrypy.quickstart(Server(), config=CONFIGFILE)
