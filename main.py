@@ -27,7 +27,7 @@ import time
 
 #get configuration-file
 CONFIGFILE = os.path.join(os.path.dirname(__file__), 'server.conf')
-MAX_AMMOUNT_OF_CUBES = "100"
+MAX_AMMOUNT_OF_CUBES = "40"
 
 print "Start server with a a maximal amount of "+MAX_AMMOUNT_OF_CUBES+" cubes."
 
